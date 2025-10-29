@@ -1,0 +1,17 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/mrawaisc/quizz.mrawais.com
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp .env.production $DEPLOYPATH/.env
+    - /bin/cp .htaccess $DEPLOYPATH
+    - cd $DEPLOYPATH
+    - /bin/chmod 755 ./
+    - /bin/chmod -R 775 ./storage
+    - /bin/chmod -R 775 ./bootstrap/cache
+    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
+    - php artisan migrate --force
+    - php artisan storage:link
+    - php artisan config:cache
+    - php artisan route:cache
+    - php artisan view:cache
